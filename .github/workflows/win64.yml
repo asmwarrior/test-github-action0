@@ -1,6 +1,5 @@
 name: Test copypedeps with MSYS2
 
-# Controls when the workflow will run
 on:
   workflow_dispatch:
 
@@ -33,7 +32,7 @@ jobs:
 
       # Download the latest version of pedeps
       - name: Download pedeps latest version
-        shell: bash
+        shell: msys2 {0}  # Use MSYS2 shell
         run: |
           LATEST_RELEASE_URL=$(curl -s https://api.github.com/repos/brechtsanders/pedeps/releases/latest \
             | grep "browser_download_url.*win64.zip" \
@@ -43,7 +42,7 @@ jobs:
 
       # Run copypedeps on hello.exe
       - name: Run copypedeps
-        shell: msys2 {0}
+        shell: msys2 {0}  # Use MSYS2 shell
         run: |
           ./pedeps/copypedeps.exe -r -n -v ./hello.exe ./bin/
 
