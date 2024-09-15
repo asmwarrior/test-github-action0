@@ -69,8 +69,8 @@ jobs:
         shell: msys2 {0}
         run: |
           # Check if copypedeps.exe exists and its location
-          if [ -f pedeps/copypedeps.exe ]; then
-            echo "copypedeps.exe found at pedeps/copypedeps.exe"
+          if [ -f pedeps/bin/copypedeps.exe ]; then
+            echo "copypedeps.exe found at pedeps/bin/copypedeps.exe"
           else
             echo "copypedeps.exe not found!"
             exit 1
@@ -81,8 +81,8 @@ jobs:
         shell: msys2 {0}  # Use MSYS2 shell
         run: |
           # Execute copypedeps.exe if it exists
-          if [ -f pedeps/copypedeps.exe ]; then
-            ./pedeps/copypedeps.exe -r -n -v ./hello.exe ./bin/
+          if [ -f pedeps/bin/copypedeps.exe ]; then
+            ./pedeps/bin/copypedeps.exe -r -n -v ./hello.exe ./bin/
           else
             echo "copypedeps.exe is missing!"
             exit 1
