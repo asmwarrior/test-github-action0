@@ -21,9 +21,9 @@ jobs:
             mingw-w64-x86_64-toolchain
             base-devel
             zip
+            unzip
             git
             mingw-w64-x86_64-wget
-            mingw-w64-x86_64-unzip
 
       # Build the simple console project
       - name: Build C++ project
