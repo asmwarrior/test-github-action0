@@ -24,16 +24,18 @@ jobs:
             unzip
             git
             mingw-w64-x86_64-wget
+            jq
 
       # Build the simple console project
       - name: Build C++ project
-        shell: msys2 {0}
+        shell: msys2 {0}  # Use MSYS2 shell
         run: |
           g++ -o hello.exe hello.cpp
 
       # Get the latest release version and construct the download URL
       - name: Get Latest Release Version
         id: get_latest_release
+        shell: msys2 {0}  # Use MSYS2 shell
         run: |
           # Fetch the latest release version from GitHub API
           LATEST_VERSION=$(curl -s https://api.github.com/repos/brechtsanders/pedeps/releases/latest | jq -r .tag_name)
@@ -45,7 +47,7 @@ jobs:
 
       # Download and extract the specific pedeps release
       - name: Download and extract pedeps
-        shell: msys2 {0}
+        shell: msys2 {0}  # Use MSYS2 shell
         run: |
           # Use the URL from the previous step to download the file
           wget $DOWNLOAD_URL -O pedeps-latest.zip
@@ -58,7 +60,7 @@ jobs:
 
       # List files in the working directory
       - name: List files in the working directory
-        shell: msys2 {0}
+        shell: msys2 {0}  # Use MSYS2 shell
         run: |
           ls -l
 
