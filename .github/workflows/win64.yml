@@ -64,6 +64,12 @@ jobs:
         run: |
           ls -l
 
+      # Create the 'bin' directory if it doesn't exist
+      - name: Create bin directory
+        shell: msys2 {0}
+        run: |
+          mkdir -p bin
+
       # Verify the location of copypedeps.exe
       - name: Verify copypedeps location
         shell: msys2 {0}
