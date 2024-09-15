@@ -24,7 +24,7 @@ jobs:
             unzip
             git
             mingw-w64-x86_64-wget
-            mingw-w64-x86_64-jq
+            mingw-w64-x86_64-jq  # Install jq
 
       # Build the simple console project
       - name: Build C++ project
@@ -37,7 +37,7 @@ jobs:
         id: get_latest_release
         shell: msys2 {0}  # Use MSYS2 shell
         run: |
-          # Fetch the latest release version from GitHub API
+          # Fetch the latest release version from GitHub API and parse with jq
           LATEST_VERSION=$(curl -s https://api.github.com/repos/brechtsanders/pedeps/releases/latest | jq -r .tag_name)
           echo "Latest version is $LATEST_VERSION"
 
