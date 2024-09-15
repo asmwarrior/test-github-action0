@@ -31,19 +31,36 @@ jobs:
         run: |
           g++ -o hello.exe hello.cpp
 
-      # Download the latest 64-bit binary release of pedeps
-      - name: Download pedeps latest 64-bit binary
+      # Get the latest release version and construct the download URL
+      - name: Get Latest Release Version
+        id: get_latest_release
+        run: |
+          # Fetch the latest release version from GitHub API
+          LATEST_VERSION=$(curl -s https://api.github.com/repos/brechtsanders/pedeps/releases/latest | jq -r .tag_name)
+          echo "Latest version is $LATEST_VERSION"
+
+          # Construct the download URL
+          DOWNLOAD_URL="https://github.com/brechtsanders/pedeps/releases/download/${LATEST_VERSION}/pedeps-${LATEST_VERSION}-win64.zip"
+          echo "DOWNLOAD_URL=${DOWNLOAD_URL}" >> $GITHUB_ENV
+
+      # Download and extract the specific pedeps release
+      - name: Download and extract pedeps
         shell: msys2 {0}
         run: |
-          # Get the download URL for the latest 64-bit binary release
-          LATEST_RELEASE_URL=$(curl -s https://api.github.com/repos/brechtsanders/pedeps/releases/latest \
-            | grep "browser_download_url.*win64.zip" \
-            | head -n 1 \
-            | cut -d '"' -f 4)
+          # Use the URL from the previous step to download the file
+          wget $DOWNLOAD_URL -O pedeps-latest.zip
 
-          # Download the file
-          wget "$LATEST_RELEASE_URL" -O pedeps-latest.zip
+          # Unzip the downloaded file
           unzip pedeps-latest.zip -d pedeps
+
+          # List contents of the pedeps directory to verify
+          ls -R pedeps
+
+      # List files in the working directory
+      - name: List files in the working directory
+        shell: msys2 {0}
+        run: |
+          ls -l
 
       # Run copypedeps on hello.exe
       - name: Run copypedeps
