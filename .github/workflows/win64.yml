@@ -31,13 +31,17 @@ jobs:
         run: |
           g++ -o hello.exe hello.cpp
 
-      # Download the latest version of pedeps
-      - name: Download pedeps latest version
-        shell: msys2 {0}  # Use MSYS2 shell
+      # Download the latest 64-bit binary release of pedeps
+      - name: Download pedeps latest 64-bit binary
+        shell: msys2 {0}
         run: |
+          # Get the download URL for the latest 64-bit binary release
           LATEST_RELEASE_URL=$(curl -s https://api.github.com/repos/brechtsanders/pedeps/releases/latest \
             | grep "browser_download_url.*win64.zip" \
+            | head -n 1 \
             | cut -d '"' -f 4)
+
+          # Download the file
           wget "$LATEST_RELEASE_URL" -O pedeps-latest.zip
           unzip pedeps-latest.zip -d pedeps
 
