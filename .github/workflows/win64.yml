@@ -23,6 +23,7 @@ jobs:
             zip
             git
             mingw-w64-x86_64-wget
+            mingw-w64-x86_64-unzip
 
       # Build the simple console project
       - name: Build C++ project
