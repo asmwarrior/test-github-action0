@@ -64,11 +64,29 @@ jobs:
         run: |
           ls -l
 
+      # Verify the location of copypedeps.exe
+      - name: Verify copypedeps location
+        shell: msys2 {0}
+        run: |
+          # Check if copypedeps.exe exists and its location
+          if [ -f pedeps/copypedeps.exe ]; then
+            echo "copypedeps.exe found at pedeps/copypedeps.exe"
+          else
+            echo "copypedeps.exe not found!"
+            exit 1
+          fi
+
       # Run copypedeps on hello.exe
       - name: Run copypedeps
         shell: msys2 {0}  # Use MSYS2 shell
         run: |
-          ./pedeps/copypedeps.exe -r -n -v ./hello.exe ./bin/
+          # Execute copypedeps.exe if it exists
+          if [ -f pedeps/copypedeps.exe ]; then
+            ./pedeps/copypedeps.exe -r -n -v ./hello.exe ./bin/
+          else
+            echo "copypedeps.exe is missing!"
+            exit 1
+          fi
 
       # Upload the result as an artifact to review dependencies
       - uses: actions/upload-artifact@v4
