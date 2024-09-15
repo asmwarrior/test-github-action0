@@ -1,0 +1,53 @@
+name: Test copypedeps with MSYS2
+
+# Controls when the workflow will run
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      # Checkout the repository
+      - uses: actions/checkout@v4
+
+      # Set up MSYS2 with the necessary toolchain
+      - uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          msystem: MINGW64
+          location: D:\
+          install: >-
+            mingw-w64-x86_64-toolchain
+            base-devel
+            zip
+            git
+
+      # Build the simple console project
+      - name: Build C++ project
+        shell: msys2 {0}
+        run: |
+          g++ -o hello.exe hello.cpp
+
+      # Download the latest version of pedeps
+      - name: Download pedeps latest version
+        shell: bash
+        run: |
+          LATEST_RELEASE_URL=$(curl -s https://api.github.com/repos/brechtsanders/pedeps/releases/latest \
+            | grep "browser_download_url.*win64.zip" \
+            | cut -d '"' -f 4)
+          wget "$LATEST_RELEASE_URL" -O pedeps-latest.zip
+          unzip pedeps-latest.zip -d pedeps
+
+      # Run copypedeps on hello.exe
+      - name: Run copypedeps
+        shell: msys2 {0}
+        run: |
+          ./pedeps/copypedeps.exe -r -n -v ./hello.exe ./bin/
+
+      # Upload the result as an artifact to review dependencies
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hello-dependencies
+          path: ./bin/
