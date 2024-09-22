@@ -104,6 +104,7 @@ jobs:
 
       # Rename output zip file using the timestamp
       - name: Zip hello.exe and dependencies with timestamp
+        shell: msys2 {0}  # Ensure MSYS2 shell is used for the zip command
         run: |
           TIME=${{ steps.time.outputs.time }}
           ZIP_NAME="hello-${TIME}.zip"
